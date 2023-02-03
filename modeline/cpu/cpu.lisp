@@ -159,7 +159,7 @@ utilization."
                    (:sysfs   (with-open-file (f (cdr *acpi-thermal-zone*))
                                (/ (read f) 1000))))))
     (format nil "^[~A~,1F°C^]"
-            (bar-zone-color tempval *cpu-temp-med* *cpu-temp-hi* *cpu-temp-crit*)
+            (bar-zone-color (if tempval tempval 0) *cpu-temp-med* *cpu-temp-hi* *cpu-temp-crit*)
             tempval)))
 
 (defun cpu-modeline (ml)
