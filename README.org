@@ -94,7 +94,7 @@ Advertise your module here, open a PR and include a org-mode link!
 - [[./modeline/disk/README.org][disk]] :: Display filesystem information in the modeline
 - [[./modeline/hidden/README.org][hidden]] :: Add hidden window info to the modeline.
 - [[./modeline/hostname/README.org][hostname]] :: Put hostname in the StumpWM modeline
-- [[./modeline/hostname/README.org][keys]] :: Show in the StumpWM modeline the prefix keys when pressed.
+- [[./modeline/keys/README.org][keys]] :: Show in the StumpWM modeline the prefix keys when pressed.
 - [[./modeline/maildir/README.org][maildir]] :: Display maildir information in the modeline (%M conflicts with mem).
 - [[./modeline/mem/README.org][mem]] :: Display memory in the modeline, %M conflicts with maildir.
 - [[./modeline/net/README.org][net]] :: Displays information about the current network connection.
