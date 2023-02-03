@@ -80,7 +80,7 @@ not available). Don't make calculation more than once a second."
   (let ((cpu (truncate (* 100 (current-cpu-usage)))))
     (format nil *cpu-usage-modeline-fmt* (bar-zone-color cpu) cpu)))
 
-(defun fmt-cpu-usage-bar (ml &optional (width *cpu-usage-bar-width*) (full *cpu-usage-bar-full*) (empty *cpu-usage-bar-empty*))
+(defun fmt-cpu-usage-bar (&optional ml (width *cpu-usage-bar-width*) (full *cpu-usage-bar-full*) (empty *cpu-usage-bar-empty*))
   "Returns a coloured bar-graph representing the current percent of average CPU
 utilization."
   (declare (ignore ml))
