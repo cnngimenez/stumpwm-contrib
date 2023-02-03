@@ -36,7 +36,7 @@
 (defvar *cpu-usage-modeline-fmt* "CPU: ^[~A~3D%^] "
   "The default formatting for CPU usage.")
 
-(defvar *loadavg-modeline-fmt* "AVG: ^[~A~3D ~A~3D ~A~3D^] "
+(defvar *loadavg-modeline-fmt* "AVG: ^[~A~3D^] ^[~A~3D^] ^[~A~3D^] "
   "The default formatting for load average usage.")
 
 (defun current-loadavg ()
