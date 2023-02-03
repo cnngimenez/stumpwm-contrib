@@ -1,0 +1,35 @@
+
+* Usage
+Load the module at yout init by adding the following at your =~/.stumpwmrc=:
+
+#+BEGIN_SRC lisp
+  (load-module "keys")
+#+END_SRC
+
+
+After that, add =%K= at your mode-line where you want to see the keys. For example, the following code adds the key pressed at the beginning of the mode-line:
+
+#+BEGIN_SRC lisp
+  (push "%K " *screen-mode-line-format*)
+#+END_SRC
+
+The result would be a mode-line with the following string:
+
+: [] [Default] 0+firefox ...
+
+When you press the C-t prefix, the mode-line will show:
+
+: [c-t] [Default] 0+firefox ...
+
+** Changing the %K string
+The =*keys-modeline-fmt*= variable can change the way the keys are shown on the mode-line. Its value is a string. The following percent codes can be used in the string:
+
+| Code | Description           |
+|------+-----------------------|
+| %k   | All keys as a string. |
+
+* Notes
+Keep in mind that each C-t or S-t (the prefix you configured) is used, it will update the mode-line! Therefore, if it takes to much time to recreate the mode-line, this will affect each time you press the prefix key. See =keys::save-key-seq= implementation.
+
+* License
+This work is under the General Public License version 3. More information at [[https://www.gnu.org/licenses/gpl-3.0.html]].
