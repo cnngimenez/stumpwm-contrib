@@ -34,8 +34,26 @@
 
 
 (defvar *cpu-usage-modeline-fmt* "CPU: ^[~A~3D%^] "
-  "The default formatting for CPU usage")
+  "The default formatting for CPU usage.")
 
+(defvar *loadavg-modeline-fmt* "AVG: ^[~A~3D ~A~3D ~A~3D^] "
+  "The default formatting for load average usage.")
+
+(defun current-loadavg ()
+  "Return the CPU load average usage.
+This is the uptime same results.
+
+From the uptime manpage:
+The values returned are 1, 5 and 15 minutes.  These are the average
+number of processes in runnable or uninterruptable state.  A load
+average result 1 means a single CPU system is loaded all the time
+while on a 4 CPU system it means it was idle 75% of the time."
+  (with-open-file (in #P"/proc/loadavg" :direction :input)
+       (let ((min-1 (read in))
+             (min-5 (read in))
+             (min-15 (read in)))
+         (values min-1 min-5 min-15))))
+  
 ;; More or less yanked from the wiki.
 (defun current-cpu-usage ()
   "Return the average CPU usage since the last call.  First value is percent
@@ -73,6 +91,15 @@ not available). Don't make calculation more than once a second."
                   *prev-iowait* iowait
                   *prev-result* (list cpu-result sys-result io-result)))))))
   (apply 'values *prev-result*))
+
+(defun fmt-loadavg ()
+  "Returns a string representing current the percent of average CPU
+  utilization."
+  (multiple-value-bind (min-1 min-5 min-15) (current-loadavg)    
+    (format nil *loadavg-modeline-fmt*
+            (bar-zone-color min-1 0.2 0.5 0.9) min-1
+            (bar-zone-color min-1 0.2 0.5 0.9) min-5
+            (bar-zone-color min-1 0.2 0.5 0.9) min-15)))
 
 (defun fmt-cpu-usage ()
   "Returns a string representing current the percent of average CPU
@@ -172,9 +199,10 @@ utilization."
     (#\C  fmt-cpu-usage-bar)
     (#\f  fmt-cpu-freq)
     (#\r  fmt-cpu-freq-range)
-    (#\t  fmt-cpu-temp)))
+    (#\t  fmt-cpu-temp)
+    (#\l  fmt-loadavg)))
 
-(defvar *cpu-modeline-fmt* "%c (%f) %t"
+(defvar *cpu-modeline-fmt* "%c (%f) %t %l"
   "The default value for displaying cpu information on the modeline.
 
 @table @asis
@@ -190,5 +218,7 @@ CPU frequency
 CPU frequency range
 @item %t
 CPU temperature
+@item %l
+Load Average 1, 5 and 15 minutes.
 @end table
 ")
