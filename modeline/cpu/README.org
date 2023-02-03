@@ -5,14 +5,26 @@ Put:
 #+END_SRC
 In your =~/.stumpwmrc=
 
-Then you can use:
+Then you can use: =%C= into your modeline to add CPU information. For example, the following code adds CPU information at the begining of the modeline:
 
-%c (CPU usage as %)
-%C (CPU usage as bar graph)
-%t (CPU temperature)
-%f (CPU frequency)
+#+BEGIN_SRC lisp
+  (push "%C | " *screen-mode-line-format*)
+#+END_SRC
 
-in your mode line format.
+The result would be a modeline with the following string:
+
+: CPU:  10%  (480 MHZ) 10°C AVG: 0.22 0.30 0.41 | [Default]  0+firefox ...
+
+The =cpu:*cpu-modeline-fmt*= variable modifies what to show on the modeline when "%C" is used. Its value is a string used by format. Check its documentiation with =(describe '*cpu-modeline-fmt*)=.
+It has the following percent codes in the string:
+
+| Code | Description              |
+|------+--------------------------|
+| %c   | CPU usage as %           |
+| %C   | CPU usage as bar graph   |
+| %t   | CPU temperature          |
+| %f   | CPU frequency            |
+| %l   | Load average information |
 
 ** Notes
 
