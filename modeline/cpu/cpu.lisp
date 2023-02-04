@@ -15,6 +15,13 @@
 ;; Install formatters.
 (add-screen-mode-line-formatter #\C 'cpu-modeline)
 
+;;;; It is not needed really...
+;;
+;; (defvar *cpu-number* 1
+;;   "How many CPUs does your computer have?
+;; This is used to calculate the low, med, and high values of loadavg.")
+;;
+
 ;; Defaults arguments for fmt-cpu-usage-bar
 (defvar *cpu-usage-bar-width* 10)
 (defvar *cpu-usage-bar-full* #\#)
@@ -32,12 +39,33 @@
 (defvar *cpu-temp-hi* 75)
 (defvar *cpu-temp-crit* 90)
 
+(defvar *loadavg-med* 0.2)
+(defvar *loadavg-hi* 0.5)
+(defvar *loadavg-crit* 0.9)
 
 (defvar *cpu-usage-modeline-fmt* "CPU: ^[~A~3D%^] "
   "The default formatting for CPU usage.")
 
 (defvar *loadavg-modeline-fmt* "AVG: ^[~A~3D^] ^[~A~3D^] ^[~A~3D^] "
   "The default formatting for load average usage.")
+
+(defun set-cpu-number (number)
+  "Calculate some values with the NUMBER of CPU cores.
+The number of CPU cores is rather troublesome to get it automatically.
+It is not something really important, bit it can be used to calculate
+some values like the medium, high, and critical values for loadavg.
+
+These values are used to set the colour to yellow, orange, and red
+at the mode-line. This shows the user how critical is the value with
+a colour coded way.
+
+The returned values are the results calculated in the order mentioned
+before.
+"  ;; (setq *cpu-number* number)
+  (setq *loadavg-med* (* number 0.2)
+        *loadavg-hi* (* number 0.5)
+        *loadavg-crit* (* number 0.9))
+  (values *loadavg-med* *loadavg-hi* *loadavg-crit*))
 
 (defun current-loadavg ()
   "Return the CPU load average usage.
@@ -97,9 +125,15 @@ not available). Don't make calculation more than once a second."
   utilization."
   (multiple-value-bind (min-1 min-5 min-15) (current-loadavg)    
     (format nil *loadavg-modeline-fmt*
-            (bar-zone-color min-1 0.2 0.5 0.9) min-1
-            (bar-zone-color min-1 0.2 0.5 0.9) min-5
-            (bar-zone-color min-1 0.2 0.5 0.9) min-15)))
+            (bar-zone-color min-1
+                            *loadavg-med* *loadavg-hi* *loadavg-crit*)
+            min-1
+            (bar-zone-color min-5
+                            *loadavg-med* *loadavg-hi* *loadavg-crit*)
+            min-5
+            (bar-zone-color min-15
+                            *loadavg-med* *loadavg-hi* *loadavg-crit*)
+            min-15)))
 
 (defun fmt-cpu-usage ()
   "Returns a string representing current the percent of average CPU

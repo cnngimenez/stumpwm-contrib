@@ -2,6 +2,7 @@
 
 (defpackage #:cpu
   (:use #:cl :stumpwm)
-  (:export #:*cpu-modeline-fmt*
-	   #:*acpi-thermal-zone*))
+  (:export #:set-cpu-number
+           #:*cpu-modeline-fmt*
+           #:*acpi-thermal-zone*))
 

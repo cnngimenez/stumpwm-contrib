@@ -1,14 +1,15 @@
 ** Usage
 Put:
 #+BEGIN_SRC lisp
-(load-module "cpu")
+  (load-module "cpu")
 #+END_SRC
 In your =~/.stumpwmrc=
 
-Then you can use: =%C= into your modeline to add CPU information. For example, the following code adds CPU information at the begining of the modeline:
+Then you can use: =%C= into your modeline to add CPU information. Also, for correct colouring, ste the amount of CPU cores your computer have (see =/proc/cpuinfo= file for this information). For example, the following code adds CPU information at the begining of the modeline, and indicates 4 CPU cores.
 
 #+BEGIN_SRC lisp
   (push "%C | " *screen-mode-line-format*)
+  (set-cpu-number 4)
 #+END_SRC
 
 The result would be a modeline with the following string:
@@ -28,4 +29,17 @@ It has the following percent codes in the string:
 
 ** Notes
 
-This is specific to Linux.
+This library is specific to Linux
+
+*** Get the number of CPU cores automatically
+It is possible to get the number of CPU with [[https://github.com/muyinliu/cl-cpus][cl-cpus]]. Clone the project with:
+
+: git clone ~/quicklisp/local-projects/cl-cpus ~/quicklisp/local-projects/cl-plus
+
+And then use this code:
+
+#+BEGIN_SRC lisp
+  (ql:quickload :cl-cpus)
+  (set-cpu-number (cl-cpus:get-number-of-processors))
+#+END_SRC
+
